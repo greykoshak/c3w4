@@ -1,10 +1,12 @@
 <!--DOCTYPE html -->
 <html>
 <body>
+
 {% if 'QUERY_STRING' in request.META %}
-    <h1> {{ request_method }} {{ get_letter }}: {{ get_value }} statement is empty </h1>
+    <h1> {{ request_method }} {{ get_letter }}{{ colon }} {{ get_value }} statement is empty </h1>
 {% elif 'HTTP_X_PRINT_STATEMENT' in request.META %}
-    <h2> statement is {{ get_tag }} </h2>
+    <h2> statement is {{get_tag}} </h2>
 {% endif %}
+
 </body>
 </html>
