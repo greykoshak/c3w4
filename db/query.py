@@ -4,7 +4,7 @@ import datetime
 
 # from django.db.models import Q
 
-
+# Test 1 passed +
 def create():
     u1 = User.objects.create(first_name='u1', last_name='u1')
     u1.save()
@@ -32,64 +32,87 @@ def create():
     # topic1.save()
     return
 
-
+# Test 2 passed ++
 def edit_all():
     User.objects.all().update(first_name='uu1')
     return
 
-
+# Test 3 passed +++
 def edit_u1_u2():
     User.objects.filter(first_name__in=['u1', 'u2']).update(first_name='uu1')
     return
 
 
+# Test 4 passed ++++
 # удалить пользователя с first_name u1 (функция delete_u1)
 def delete_u1():
     User.objects.filter(first_name='u1').delete()
     return
 
+# Test 5 not passed -----
 # отписать пользователя с first_name u2 от блогов--------------------------
 def unsubscribe_u2_from_blogs():
-    Blog.objects.filter(subscribers__user_name='u2').subscribers.remove()
+    # Blog.objects.filter(subscribers__user_name='u2').subscribers.remove()
     return
 
+# Test 6 passed ++++++
 # Найти топики у которых дата создания больше 2018-01-01------------------
 def get_topic_created_grated():
-    topics = Topic.objects.filter(created__gt=datetime.date(2018, 1, 1))
-    return
+    date_time_str = '2018-01-01 00:00:00.000000'
+    date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
+
+    return Topic.objects.filter(created__gt=date_time_obj.date())
 
 
+# Test 7 passed +++++++
 def get_topic_title_ended():
-    return
+    return Topic.objects.filter(title__endswith='content')
 
 
-def get_u_with_limit():
-    return
+# Test 8 passed ++++++++
+def get_user_with_limit():
+    return User.objects.all().order_by('-id')[:2]
 
 
+# Test 9 not passed ---------
 def get_topic_count():
     return
 
 
+# Test 10 not passed ----------
 def get_avg_topic_count():
     return
 
 
+# Test 11 not passed -----------
 def get_blog_that_have_more_than_one_topic():
     return
 
 
+# Test 12 passed ++++++++++++
 def get_topic_by_u1():
-    return
+    return Topic.objects.filter(author__first_name='u1')
 
 
-def get_u_that_dont_have_blog():
-    return
+# Test 13 passed +++++++++++++
+def get_user_that_dont_have_blog():
+    return User.objects.filter(blog__isnull=True).order_by('pk')
 
 
+# Test 14 not passed --------------
 def get_topic_that_like_all_us():
     return
 
 
+# Test 15 passed +++++++++++++++
 def get_topic_that_dont_have_like():
-    return
+    return Topic.objects.filter(likes__isnull=True)
+
+
+# import db.query
+#
+# def db_view(request):
+#     my_lines = []
+#     result = db.query.get_topic_that_dont_have_like()
+#     my_lines.append("Ready")
+#     return render(request, 'db_view.html', context={'my_lines': my_lines})
