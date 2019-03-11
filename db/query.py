@@ -1,8 +1,9 @@
-from db.models import User, Blog, Topic
 import datetime
-# from django.util import datetime
 
-# from django.db.models import Q
+from pytz import UTC
+
+from db.models import User, Blog, Topic
+
 
 # Test 1 passed +
 def create():
@@ -25,17 +26,21 @@ def create():
 
     topic1 = Topic.objects.create(title='topic1', blog=blog1, author=u1)
     topic1.save()
-    topic2 = Topic.objects.create(title='topic2_content', blog=blog1, author=u3, created='2017-01-01')
+
+    topic2 = Topic.objects.create(title='topic2_content', blog=blog1, author=u3,
+                                  created=datetime(year=2017, month=1, day=1, tzinfo=UTC))
     topic2.save()
 
     topic1.likes.add(u1, u2, u3)
     # topic1.save()
     return
 
+
 # Test 2 passed ++
 def edit_all():
     User.objects.all().update(first_name='uu1')
     return
+
 
 # Test 3 passed +++
 def edit_u1_u2():
@@ -49,19 +54,18 @@ def delete_u1():
     User.objects.filter(first_name='u1').delete()
     return
 
+
 # Test 5 not passed -----
 # отписать пользователя с first_name u2 от блогов--------------------------
 def unsubscribe_u2_from_blogs():
     # Blog.objects.filter(subscribers__user_name='u2').subscribers.remove()
     return
 
+
 # Test 6 passed ++++++
 # Найти топики у которых дата создания больше 2018-01-01------------------
 def get_topic_created_grated():
-    date_time_str = '2018-01-01 00:00:00.000000'
-    date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
-
-    return Topic.objects.filter(created__gt=date_time_obj.date())
+    return Topic.objects.filter(created__gt=datetime(year=2018, month=1, day=1, tzinfo=UTC))
 
 
 # Test 7 passed +++++++
@@ -109,10 +113,10 @@ def get_topic_that_dont_have_like():
     return Topic.objects.filter(likes__isnull=True)
 
 
-# import db.query
-#
-# def db_view(request):
-#     my_lines = []
-#     result = db.query.get_topic_that_dont_have_like()
-#     my_lines.append("Ready")
-#     return render(request, 'db_view.html', context={'my_lines': my_lines})
+    # import db.query
+    #
+    # def db_view(request):
+    #     my_lines = []
+    #     result = db.query.get_topic_that_dont_have_like()
+    #     my_lines.append("Ready")
+    #     return render(request, 'db_view.html', context={'my_lines': my_lines})
